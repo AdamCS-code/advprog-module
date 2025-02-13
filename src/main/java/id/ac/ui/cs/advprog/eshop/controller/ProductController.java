@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import id.ac.ui.cs.advprog.eshop.model.Product;
 import id.ac.ui.cs.advprog.eshop.service.ProductService;
 
+import java.util.Iterator;
+
 @Controller
 @RequestMapping("/product")
 public class ProductController {
@@ -54,9 +56,12 @@ public class ProductController {
     public String updateProduct(@PathVariable("id") String id, @ModelAttribute Product product, Model model) {
         product.setProductId(id);
         productService.edit(product);
-        System.out.print(product.getProductName() + " ");
-        System.out.print(product.getProductId() + " ");
-        System.out.print(product.getProductQuantity() + " ");
+        return "redirect:/product/list";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteProduct(@PathVariable("id") String id) {
+        productService.delete(id);
         return "redirect:/product/list";
     }
 }
