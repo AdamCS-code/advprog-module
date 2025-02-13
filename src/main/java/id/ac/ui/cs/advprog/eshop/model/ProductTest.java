@@ -12,7 +12,7 @@ class ProductTest {
     void setUp() {
         this.product = new Product();
         this.product.setProductId("770081a9-e62b-449f-ac9d-f72266bd9e93");
-        this.product.setProductName("Adam Caldipawell Sembiring");
+        this.product.setProductName("Sampo Bang Madun");
         this.product.setProductQuantity(100);
     }
 
