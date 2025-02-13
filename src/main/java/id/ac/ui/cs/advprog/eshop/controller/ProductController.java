@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
 import id.ac.ui.cs.advprog.eshop.service.ProductService;
@@ -40,5 +41,22 @@ public class ProductController {
     public String listProduct(Model model) {
         model.addAttribute("products", productService.findAll());
         return "productList";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String updateProduct(@PathVariable("id") String id, Model model) {
+        Product product = productService.findById(id);
+        model.addAttribute("product", product);
+        return "EditProduct";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String updateProduct(@PathVariable("id") String id, @ModelAttribute Product product, Model model) {
+        product.setProductId(id);
+        productService.edit(product);
+        System.out.print(product.getProductName() + " ");
+        System.out.print(product.getProductId() + " ");
+        System.out.print(product.getProductQuantity() + " ");
+        return "redirect:/product/list";
     }
 }

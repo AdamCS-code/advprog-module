@@ -8,13 +8,10 @@
 <body>
 
 <div class="container">
-    <h3>Create New Product</h3>
+    <h3>Edit New Product</h3>
 
-    <form th:action="@{/product/create}" th:object="${product}" method="post">
-        <div class="form-group">
-            <label for="nameInput">ID</label>
-            <input th:field="*{productId}" type="text" class="form-control mb-4 col-4" id="idInput" placeholder="Enter product's id">
-        </div>
+    <form th:action="@{/product/edit/__${product.productId}__}" th:object="${product}" method="post">
+        <input type="hidden" th:field="*{productId}" />
         <div class="form-group">
             <label for="nameInput">Name</label>
             <input th:field="*{productName}" type="text" class="form-control mb-4 col-4" id="nameInput" placeholder="Enter product's name">
