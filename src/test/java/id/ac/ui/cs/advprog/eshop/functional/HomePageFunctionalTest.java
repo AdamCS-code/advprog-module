@@ -30,12 +30,13 @@ class HomePageFunctionalTest {
         baseUrl = String.format("%s:%d", testBaseUrl, port);
     }
 
+
+
     @Test
     void pageTitle_isCorrect(ChromeDriver driver) throws Exception {
         driver.get(baseUrl);
         String pageTitle = driver.getTitle();
 
-        // Verify
         assertEquals("ADV Shop", pageTitle);
     }
 
