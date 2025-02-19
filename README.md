@@ -1,3 +1,16 @@
+Refleksi Modul 2.1
+Pada module kali ini saya menyelesaikan beberapa masalah terkait yang disampaikan saat code scanning:
+1. Mengganti public modifier dengan default modifier di ProductService.java
+2. Menerapkan hash remediation pada workflow scorecard.yml menggunakan https://app.stepsecurity.io
+3. Menambahkan LICENSE sebagai tanda orisinalitas product ini
+
+Refleksi Modul 2.2
+Menurut saya, saya telah menerapkan CI/CD pipelines. Dimana proses integrasi update dan perubahan, dilakukan secara otomatis
+ketika ada event push atau pull request. Dan juga, deployment secara otomatis di Koyeb. Proses CI yang saya
+implementasikan juga include testing dan code scanning. Sehingga, saya bisa meningkatkan code quality. 
+Pada proses CD, saya menggunakan koyeb untuk hosting aplikasi saya. Selain itu, saya menggunakan docker untuk memudahkan 
+deploy aplikasi dengan mengirim image.
+
 Refleksi Modul 1.1
 
 Pada exercise modul ini, kita diminta untuk membuat fitur mengedit dan menghapus product yang sudah kita tambahkan. 
