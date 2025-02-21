@@ -23,5 +23,5 @@ jobs:
           git-branch: '${{ github.head_ref }}'
           app-name: eshop-adpro-${{ github.head_ref }}
           service-name: '${{ github.head_ref }}'
-          service-port: '8080:http'
+          service-ports: '8080:http'
           service-routes: '/:8080'
