@@ -1,11 +1,13 @@
 package id.ac.ui.cs.advprog.eshop.service;
 import id.ac.ui.cs.advprog.eshop.model.Car;
-import java.util.List;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+@Service
 public interface CarService {
-    public Car create(Car car);
-    public List<Car> findAll();
+    Car create(Car car);
+    List<Car> findAll();
     Car findById(String carId);
-    public Car update(String id, Car updatedCar);
-    public void deleteByCarId(String carId);
+    Car edit(String id, Car updatedCar);
+    void deleteByCarId(String carId);
 }

@@ -1,3 +1,31 @@
+Refleksi Modul 3
+1. Implementasi SOLID pada aplikasi saya:  
+   1. SRP (Single Responsibility Principle)
+      Saya telah memastikan bahwa setiap class memiliki tanggung jawab yang jelas dengan memisahkannya berdasarkan fungsinya. Sebagai contoh, class yang menangani homepage, produk, dan mobil telah dikelompokkan dalam file terpisah. Pemisahan ini diterapkan baik dalam repository (CarRepository & ProductRepository), service (CarServiceImpl & ProductServiceImpl), model (Car & Product), maupun controller (CarController, HomePageController, & ProductController). Pendekatan yang sama juga diterapkan dalam kode pengujian agar lebih terorganisir.
+   2. LSP (Liskov Substitution Principle)
+      Prinsip ini diterapkan dalam perubahan struktur kode antara branch before-solid dan after-solid, di mana sebelumnya, controller untuk produk dan mobil berada dalam satu file, tetapi kemudian dipisahkan menjadi CarController.java dan ProductController.java. Pemisahan ini dilakukan karena kedua class tersebut tidak memiliki hubungan hierarkis yang mengharuskan pewarisan (inheritance).
+   3. OCP (Open/Closed Principle)
+      Saya menerapkan prinsip ini dengan menambahkan metode update() pada model Car, sehingga subclass cukup melakukan overriding metode tersebut tanpa harus mengubah perilaku superclass.
+   4. ISP (Interface Segregation Principle)
+      Prinsip ini diterapkan dengan memisahkan interface untuk model Car dan Product, sehingga setiap service hanya mengimplementasikan metode yang benar-benar dibutuhkan tanpa harus bergantung pada metode yang tidak relevan.
+   5. DI (Dependency Inversion Principle)
+      Penerapan DI terlihat pada CarController.java, di mana sebelumnya, class ini secara langsung menggunakan implementasi CarServiceImpl.java. Namun, untuk mengikuti prinsip DI, ketergantungan tersebut diubah menjadi CarService, yaitu interface yang lebih abstrak. Dengan cara ini, controller tidak bergantung langsung pada implementasi tertentu, sehingga memudahkan pengujian dan pemeliharaan kode.
+2. Keuntungan mengimplementasikan SOLID
+   - SRP: Dengan membagi tanggung jawab setiap class secara spesifik, kompleksitas kode berkurang sehingga proses pengembangan dan pemeliharaan (termasuk debugging) menjadi lebih mudah.
+
+   - LSP: Memastikan bahwa setiap subclass tetap dapat menggantikan superclass tanpa mengubah perilaku sistem. Meskipun saat ini belum ada subclass dalam program saya, prinsip ini akan sangat membantu jika nanti diperlukan ekspansi sistem.
+
+   - OCP: Membantu dalam pengembangan subclass tanpa harus mengubah superclass yang sudah ada. Jika di masa depan saya ingin menambahkan model baru yang merupakan turunan dari model yang ada, prinsip ini akan sangat berguna.
+
+   - ISP: Memastikan bahwa setiap interface hanya memiliki metode yang relevan, sehingga implementasi lebih efisien dan tidak terbebani dengan metode yang tidak diperlukan.
+
+   - DI: Mempermudah pemeliharaan kode, terutama jika ingin mengganti implementasi service. Misalnya, jika CarController.java awalnya menggunakan CarServiceImpl, lalu saya ingin menggantinya dengan CarServiceMock untuk pengujian, perubahan dapat dilakukan tanpa perlu mengedit kode di CarController.java karena sudah bergantung pada interface CarService.java.
+3. Kekurangan tidak mengimplementasikan SOLID
+   - Kesulitan dalam pemeliharaan kode, karena tidak ada pemisahan tanggung jawab yang jelas, sehingga sulit bagi developer untuk menemukan dan memperbaiki fitur tertentu.
+   - Uji coba kode menjadi sulit, karena fungsionalitas yang bercampur dalam satu class menyulitkan proses pengujian.
+   - Beban implementasi yang tidak perlu, terutama jika ada interface besar yang mencakup banyak fungsi yang tidak selalu digunakan oleh class yang mengimplementasikannya.
+   - Ketergantungan tinggi antar komponen, sehingga sulit mengganti atau memodifikasi kode tanpa memengaruhi banyak bagian lain dalam sistem.
+   - Perubahan kecil dapat berdampak besar, karena integrasi kode yang tidak baik dan kurangnya struktur yang jelas.
 Refleksi Modul 2.1
 Pada module kali ini saya menyelesaikan beberapa masalah terkait yang disampaikan saat code scanning:
 1. Mengganti public modifier dengan default modifier di ProductService.java
