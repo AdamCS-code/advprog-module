@@ -1,11 +1,11 @@
 package id.ac.ui.cs.advprog.eshop.model;
+
 import id.ac.ui.cs.advprog.eshop.enums.OrderStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
-
 
 class OrderTest {
     private List<Product> products;
@@ -35,14 +35,14 @@ class OrderTest {
                 "13652556-012a-4c07-b546-54eb1396d79b",
                 this.products, 1708560000L, "Safira Sudrajat",
                 OrderStatus.SUCCESS.getValue());
-        assertEquals("SUCCESS", order.getStatus());
+        assertEquals(OrderStatus.SUCCESS.getValue(), order.getOrderStatus());
     }
 
     @Test
     void testCreateOrderEmptyProduct() {
         this.products.clear();
         assertThrows(IllegalArgumentException.class, () -> {
-            Order order = new Order(
+            new Order(
                     "13652556-012a-4c07-b546-54eb1396d79b",
                     this.products,
                     1708560000L,
@@ -54,7 +54,7 @@ class OrderTest {
     @Test
     void testCreateOrderInvalidStatus() {
         assertThrows(IllegalArgumentException.class, () -> {
-            Order order = new Order(
+            new Order(
                     "13652556-012a-4c07-b546-54eb1396d79b",
                     this.products,
                     1708560000L,
@@ -73,7 +73,7 @@ class OrderTest {
                 "Safira Sudrajat"
         );
         order.setStatus("CANCELLED");
-        assertEquals("CANCELLED", order.getStatus());
+        assertEquals(OrderStatus.CANCELLED.getValue(), order.getOrderStatus());
     }
 
     @Test

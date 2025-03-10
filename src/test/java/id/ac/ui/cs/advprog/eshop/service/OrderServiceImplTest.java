@@ -79,7 +79,7 @@ class OrderServiceImplTest {
         Order result = orderService.updateStatus(order.getId(), OrderStatus.SUCCESS.getValue());
 
         assertEquals(order.getId(), result.getId());
-        assertEquals(OrderStatus.SUCCESS.getValue(), result.getStatus());
+        assertEquals(OrderStatus.SUCCESS.getValue(), result.getOrderStatus());
         verify(orderRepository, times(1)).save(any(Order.class));
     }
 
