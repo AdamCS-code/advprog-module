@@ -63,9 +63,15 @@ public class PaymentTest {
     }
 
     @Test
-    void testSetMethod() {
-        payment.setMethod("BANK_TRANSFER");
-        assertEquals("BANK_TRANSFER", payment.getMethod());
+    void testSetPaymentMethod() {
+        payment.setMethod("TRANSFER_BANK");
+        assertEquals("TRANSFER_BANK", payment.getMethod());
+    }
+
+    @Test
+    void testSetWrongPaymentMethod() {
+        String paymentMethod = "EWALLET";
+        assertThrows(IllegalArgumentException.class, () -> payment.setMethod(paymentMethod));
     }
 
     @Test
@@ -85,20 +91,32 @@ public class PaymentTest {
     }
 
     @Test
-    void testInvalidVoucherCode() {
-        Map<String, String> invalidVoucherData = new HashMap<>();
-        invalidVoucherData.put("voucherCode", "INVALID12345");
-
-        payment.setPaymentData(invalidVoucherData);
-        assertEquals("ESHOP12345678ABC", payment.getPaymentData().get("voucherCode"));
+    void testInvalidVoucherMoreThan16Chars() {
+        Map<String, String> paymentData = new HashMap<>();
+        paymentData.put("voucherCode", "ESHOP12345678ABCD");
+        assertThrows(IllegalArgumentException.class, () -> payment.setPaymentData(paymentData));
     }
 
     @Test
-    void testEmptyVoucherCode() {
+    void testInvalidVoucherLessThan16Chars() {
+        Map<String, String> paymentData = new HashMap<>();
+        paymentData.put("voucherCode", "ESHOP12345678AB");
+        assertThrows(IllegalArgumentException.class,() -> payment.setPaymentData(paymentData));
+    }
+
+    @Test
+    void testInvalidVoucherStartWithoutESHOP() {
+        Map<String, String> paymentData = new HashMap<>();
+        paymentData.put("voucherCode", "PACIL12345678ABC");
+        assertThrows(IllegalArgumentException.class,() -> payment.setPaymentData(paymentData));
+    }
+
+    @Test
+    void testInvalidVoucherEmpty() {
         Map<String, String> emptyVoucherData = new HashMap<>();
         emptyVoucherData.put("voucherCode", "");
 
-        payment.setPaymentData(emptyVoucherData);
-        assertEquals("ESHOP12345678ABC", payment.getPaymentData().get("voucherCode"));
+        assertThrows(IllegalArgumentException.class,() -> payment.setPaymentData(emptyVoucherData));
+        assertNotEquals(payment.getPaymentData().get("voucherCode"), "");
     }
 }
