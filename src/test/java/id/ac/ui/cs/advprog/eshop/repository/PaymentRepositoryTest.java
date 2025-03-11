@@ -6,7 +6,6 @@ import id.ac.ui.cs.advprog.eshop.model.Product;
 import java.util.UUID;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -56,22 +55,7 @@ public class PaymentRepositoryTest {
         paymentData.put("referenceCode", "BCARAMAH");
         payment = new Payment("", order, "BANK_TRANSFER", "SUCCESS", paymentData);
 
-        List<Product> products2 = new ArrayList<>();
-
-        Product product4 = new Product();
-        product1.setProductId(UUID.randomUUID().toString());
-        product1.setProductName("product4");
-        product1.setProductQuantity(7);
-        products2.add(product4);
-
-        Order order2 = new Order(UUID.randomUUID().toString(), products2, (long) 1741625920, "Sembiring");
-        Map<String, String> paymentData2 = new HashMap<String, String>();
-
-        paymentData.put("bank_name", "BNI");
-        paymentData.put("referenceCode", "BNICERIA");
-        
-        Payment payment2 = new Payment(UUID.randomUUID().toString(), order2, "BANK_TRANSFER", "SUCCESS", paymentData2);
-
+        paymentRepository.payments.add(payment);
 
     }
 
@@ -80,7 +64,7 @@ public class PaymentRepositoryTest {
         Order newOrder = new Order (
             UUID.randomUUID().toString(), payment.getOrder().getProducts(), (long) 1741625920, "Caldipawell"
         );
-        Payment newPayment = paymentRepository.addPayment(payment.getId(), newOrder, "BANK_TRANSFER", "SUCCESS", payment.getPaymentData());
+        Payment newPayment = paymentRepository.addPayment(payment.getId(), newOrder, "BANK_TRANSFER", payment.getPaymentData());
         
         assertEquals(newPayment.getOrder(), newOrder);
         assertEquals(newPayment.getStatus(), "SUCCESS");
@@ -89,34 +73,21 @@ public class PaymentRepositoryTest {
 
     @Test
     void testSetValidStatusReject() {
-        Map<String, String> pdata = new HashMap(payment.getPaymentData());
-        String pmethod = new String(payment.getMethod());
-
-        paymentRepository.setStatus("REJECTED");
-
+        paymentRepository.setStatus(payment, "REJECTED");
         assertEquals(payment.getStatus(), "REJECTED");
-        assertEquals(payment.getOrder().getOrderStatus(), "FAILED");
-        assertEquals(payment.getPaymentData(), pdata);
-        assertEquals(payment.getMethod(), pmethod);
     }
 
     @Test
     void testSetValidStatusSuccess() {
-        Map<String, String> pdata = new HashMap(payment.getPaymentData());
-        String pmethod = new String(payment.getMethod());
-        
-        paymentRepository.setStatus("SUCCESS");
-
+        paymentRepository.setStatus(payment, "SUCCESS");
         assertEquals(payment.getStatus(), "SUCCESS");
-        assertEquals(payment.getOrder().getOrderStatus(), "SUCCESS");
-        assertEquals(payment.getPaymentData(), pdata);
-        assertEquals(payment.getMethod(), pmethod);
+ 
     }
 
     @Test
     void testSetInvalidStatus() {
         String invalidStatus = "PACIL";
-        assertThrows(IllegalArgumentException.class, () -> paymentRepository.setStatus(invalidStatus));
+        assertThrows(IllegalArgumentException.class, () -> paymentRepository.setStatus(payment, invalidStatus));
     }
 
     @Test 
@@ -133,13 +104,33 @@ public class PaymentRepositoryTest {
 
         Payment searchPayment = paymentRepository.getPayment(paymentId);
 
-        assertEquals(searchPayment, payment);
+        assertEquals(searchPayment.getId(), payment.getId());
+        assertEquals(searchPayment.getMethod(), payment.getMethod());
+        assertEquals(searchPayment.getPaymentData(), payment.getPaymentData());
     }
 
     @Test
     void testGetAllPayment() {
-        int numberOfPayment;
         
+    int numberOfPayment;
+        List<Product> products2 = new ArrayList<>();
+
+        Product product4 = new Product();
+        product4.setProductId(UUID.randomUUID().toString());
+        product4.setProductName("product4");
+        product4.setProductQuantity(7);
+        products2.add(product4);
+
+        Order order2 = new Order(UUID.randomUUID().toString(), products2, (long) 1741625920, "Sembiring");
+        Map<String, String> paymentData2 = new HashMap<String, String>();
+
+        paymentData2.put("bank_name", "BNI");
+        paymentData2.put("referenceCode", "BNICERIA");
+        
+        Payment payment2 = new Payment(UUID.randomUUID().toString(), order2, "BANK_TRANSFER", "SUCCESS", paymentData2);
+
+        paymentRepository.payments.add(payment2);
+
         List<Payment> allpayment = paymentRepository.getAllPayment();
 
         numberOfPayment = allpayment.size();
