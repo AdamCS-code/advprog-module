@@ -70,7 +70,7 @@ public class PaymentRepositoryTest {
         paymentData.put("bank_name", "BNI");
         paymentData.put("referenceCode", "BNICERIA");
         
-        Payment payment2 = new Payment("", order2, "BANK_TRANSFER", "SUCCESS", paymentData2);
+        Payment payment2 = new Payment(UUID.randomUUID().toString(), order2, "BANK_TRANSFER", "SUCCESS", paymentData2);
 
 
     }
@@ -78,9 +78,9 @@ public class PaymentRepositoryTest {
     @Test
     void testAddPayment() {
         Order newOrder = new Order (
-            UUID.randomUUID().toString(), products, (long) 1741625920, "Caldipawell"
+            UUID.randomUUID().toString(), payment.getOrder().getProducts(), (long) 1741625920, "Caldipawell"
         );
-        Payment newPayment = paymentRepository.addPayment(newOrder, "SUCCESS", payment.getPaymentData());
+        Payment newPayment = paymentRepository.addPayment(payment.getId(), newOrder, "BANK_TRANSFER", "SUCCESS", payment.getPaymentData());
         
         assertEquals(newPayment.getOrder(), newOrder);
         assertEquals(newPayment.getStatus(), "SUCCESS");
@@ -140,7 +140,7 @@ public class PaymentRepositoryTest {
     void testGetAllPayment() {
         int numberOfPayment;
         
-        List<Product> allpayment = productRepository.getAllPayment();
+        List<Payment> allpayment = paymentRepository.getAllPayment();
 
         numberOfPayment = allpayment.size();
         assertEquals(numberOfPayment, 2);
