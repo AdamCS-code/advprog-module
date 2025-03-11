@@ -5,36 +5,34 @@ import java.util.ArrayList;
 import java.util.Map;
 import id.ac.ui.cs.advprog.eshop.model.Payment;
 import id.ac.ui.cs.advprog.eshop.model.Order;
+import id.ac.ui.cs.advprog.eshop.enums.PaymentMethod;
+import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
+import id.ac.ui.cs.advprog.eshop.enums.OrderStatus;
 
 public class PaymentRepository {
+
     public List<Payment> payments = new ArrayList<>();
+
     public Payment addPayment(String paymentId, Order order, String method,  Map<String, String> paymentData) {
         Payment payment = new Payment(paymentId, order, method, null, paymentData);
 
-        if (method.equals("BANK_TRANSFER")) {
-            boolean hasBankName = paymentData.containsKey("bank_name");
-            boolean hasReferenceCode= paymentData.containsKey("referenceCode");
-       
-            if (hasBankName && hasReferenceCode) {
-                order.setOrderStatus("SUCCESS");
-                payment.setStatus("SUCCESS");
+        if (method.equals(PaymentMethod.BANK_TRANSFER.getValue())) {
+            
+            if (validateBankTransferPayment(paymentData)) {
+                setSuccess(payment);
             } 
             else {
-                order.setOrderStatus("REJECTED");
-                payment.setStatus("REJECTED");
+                setFailed(payment);
             }
       
             payments.add(payment);
         }  
-        else if (method.equals("VOUCHER")) {
-            boolean hasVoucherCode = paymentData.containsKey("voucherCode");
-            if (hasVoucherCode) {
-                order.setOrderStatus("SUCCESS");
-                order.setOrderStatus("SUCCESS");
+        else if (method.equals(PaymentMethod.VOUCHER.getValue())) {
+            if (validateVoucherPayment(paymentData)) {
+                setSuccess(payment);
             } 
             else {
-                order.setOrderStatus("REJECTED");
-                payment.setStatus("REJECTED");
+                setFailed(payment);
             }
             payments.add(payment);
         } 
@@ -44,17 +42,34 @@ public class PaymentRepository {
 
         return payment;
     } 
+
+    private void setSuccess(Payment payment) {
+        payment.getOrder().setOrderStatus(OrderStatus.SUCCESS.getValue());
+        payment.setStatus(PaymentStatus.SUCCESS.getValue());
+    }
+
+    private void setFailed(Payment payment) {
+        payment.getOrder().setOrderStatus(OrderStatus.FAILED.getValue());
+        payment.setStatus(PaymentStatus.REJECTED.getValue());
+    }
+
+    private boolean validateBankTransferPayment(Map<String, String> paymentData) {
+        boolean hasBankName = paymentData.containsKey("bank_name");
+        boolean hasReferenceCode= paymentData.containsKey("referenceCode");
+        return hasBankName && hasReferenceCode;
+    }
+
+    private boolean validateVoucherPayment(Map<String, String> paymentData) {
+        return paymentData.containsKey("voucherCode");
+    }
+
     public void setStatus(Payment payment, String status) {
-        if (status.equals("SUCCESS") || status.equals("REJECTED")) {
-            if (payments.contains(payment)) {
-                payment.setStatus(status);
-                payment.getOrder().setOrderStatus(status);
-            } 
-            else {
-                throw new IllegalArgumentException();
-            }
+        if (status.equals(PaymentStatus.SUCCESS.getValue())) {
+            setSuccess(payment);
         }
-        else {
+        else if (status.equals(PaymentStatus.REJECTED.getValue())) {
+            setFailed(payment);
+        } else {
             throw new IllegalArgumentException();
         }
     }

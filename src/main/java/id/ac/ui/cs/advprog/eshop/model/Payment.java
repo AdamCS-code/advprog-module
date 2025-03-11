@@ -23,7 +23,7 @@ public class Payment {
         this.order = order;
         this.method = method;
         this.status = status;
-        this.paymentData = new HashMap<>(paymentData);
+        this.paymentData = paymentData;
     }
 
     public void setMethod(String paymentMethod) {
@@ -41,23 +41,30 @@ public class Payment {
         }
 
         String voucherCode = paymentData.get("voucherCode");
-
-        if (voucherCode == null) {
+        String bankName = paymentData.get("bank_name");
+        String referenceCode = paymentData.get("referenceCode");
+        
+        if (bankName == null && referenceCode == null && voucherCode == null){
             throw new IllegalArgumentException();
-        }
-
-        if (voucherCode.equals("")) {
+        } 
+        else if (voucherCode.isBlank()) {
             throw new IllegalArgumentException();
         }
         
-        if (voucherCode.length() != 16 || !voucherCode.startsWith("ESHOP")) {
-            throw new IllegalArgumentException();
-        }
+        if (!voucherCode.isEmpty()) {
+            if (voucherCode.equals("")) {
+                throw new IllegalArgumentException();
+            }
+            
+            if (voucherCode.length() != 16 || !voucherCode.startsWith("ESHOP")) {
+                throw new IllegalArgumentException();
+            }
 
-        int countNumericalCharacter = checkNumericalCharacter(voucherCode);
-        if (countNumericalCharacter != 8) {
-            throw new IllegalArgumentException(); 
-        }
+            int countNumericalCharacter = checkNumericalCharacter(voucherCode);
+            if (countNumericalCharacter != 8) {
+                throw new IllegalArgumentException(); 
+            }
+        } 
 
 
         this.paymentData = new HashMap<>(paymentData);

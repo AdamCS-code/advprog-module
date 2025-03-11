@@ -2,6 +2,8 @@ package id.ac.ui.cs.advprog.eshop.model;
 
 import id.ac.ui.cs.advprog.eshop.enums.OrderStatus;
 import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
+import id.ac.ui.cs.advprog.eshop.enums.PaymentMethod;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -63,9 +65,15 @@ public class PaymentTest {
     }
 
     @Test
-    void testSetPaymentMethod() {
-        payment.setMethod("TRANSFER_BANK");
-        assertEquals("TRANSFER_BANK", payment.getMethod());
+    void testSetPaymentMethoBankTransfer() {
+        payment.setMethod("BANK_TRANSFER");
+        assertEquals(PaymentMethod.BANK_TRANSFER.getValue(), payment.getMethod());
+    }
+
+    @Test
+    void testSetPaymentMethodVoucher() {
+        payment.setMethod("VOUCHER");
+        assertEquals(PaymentMethod.VOUCHER.getValue(), payment.getMethod()); 
     }
 
     @Test

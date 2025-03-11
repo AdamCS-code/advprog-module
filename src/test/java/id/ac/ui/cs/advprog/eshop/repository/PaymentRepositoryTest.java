@@ -1,5 +1,7 @@
 package id.ac.ui.cs.advprog.eshop.repository;
 
+import id.ac.ui.cs.advprog.eshop.enums.*;
+
 import id.ac.ui.cs.advprog.eshop.model.Payment;
 import id.ac.ui.cs.advprog.eshop.model.Order;
 import id.ac.ui.cs.advprog.eshop.model.Product;
@@ -64,23 +66,25 @@ public class PaymentRepositoryTest {
         Order newOrder = new Order (
             UUID.randomUUID().toString(), payment.getOrder().getProducts(), (long) 1741625920, "Caldipawell"
         );
-        Payment newPayment = paymentRepository.addPayment(payment.getId(), newOrder, "BANK_TRANSFER", payment.getPaymentData());
+        Payment newPayment = paymentRepository.addPayment(payment.getId(), newOrder, PaymentMethod.BANK_TRANSFER.getValue(), payment.getPaymentData());
         
         assertEquals(newPayment.getOrder(), newOrder);
-        assertEquals(newPayment.getStatus(), "SUCCESS");
+        assertEquals(newPayment.getStatus(), PaymentStatus.SUCCESS.getValue());
         assertEquals(newPayment.getPaymentData(), payment.getPaymentData());
     }
 
     @Test
     void testSetValidStatusReject() {
-        paymentRepository.setStatus(payment, "REJECTED");
-        assertEquals(payment.getStatus(), "REJECTED");
+        paymentRepository.setStatus(payment, PaymentStatus.REJECTED.getValue());
+        assertEquals(payment.getStatus(), PaymentStatus.REJECTED.getValue());
+        assertEquals(OrderStatus.FAILED.getValue(), payment.getOrder().getOrderStatus());
     }
 
     @Test
     void testSetValidStatusSuccess() {
-        paymentRepository.setStatus(payment, "SUCCESS");
-        assertEquals(payment.getStatus(), "SUCCESS");
+        paymentRepository.setStatus(payment, PaymentStatus.SUCCESS.getValue());
+        assertEquals(payment.getStatus(), PaymentStatus.SUCCESS.getValue());
+        assertEquals(payment.getOrder().getOrderStatus(), OrderStatus.SUCCESS.getValue()); 
  
     }
 
